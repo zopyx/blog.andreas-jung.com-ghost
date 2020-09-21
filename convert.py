@@ -55,10 +55,18 @@ def extract_blog(fn):
     else:
         desc = None
 
+    # body
+    sel = CSSSelector('#content-core')
+    result = sel(root)
+    if result:
+        body = lxml.html.tostring(result[0], encoding=str)
+    else:
+        body = None
 
     return dict(
             filename=fn,
             date=date,
+            body=body,
             description=desc,
             title=title)
 
