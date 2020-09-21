@@ -1,5 +1,7 @@
 import os
 import lxml.html
+import pprint
+from dateutil.parser import parse
 from lxml.cssselect import CSSSelector
 
 def find_blogs():
@@ -35,15 +37,26 @@ def extract_blog(fn):
     else:
         title = None
 
+    # date
+    sel = CSSSelector('span.label')
+    result = sel(root)
+    if result:
+        date = result[0].text.strip()
+        date = parse(date)
+    else:
+        date = None
+
+
     return dict(
             filename=fn,
+            date=date,
             title=title)
 
 def main():
     blogs = find_blogs()
     for fn in blogs:
         blog_data = extract_blog(fn)
-        print(blog_data)
+        pprint.pprint(blog_data)
 
 if __name__ == '__main__':
     main()
