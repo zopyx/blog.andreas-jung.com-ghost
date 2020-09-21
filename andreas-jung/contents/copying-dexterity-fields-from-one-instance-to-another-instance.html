@@ -1,0 +1,291 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/copying-dexterity-fields-from-one-instance-to-another-instance by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> Copying Dexterity fields from one instance to another instance - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="copying-dexterity-fields-from-one-instance-to-another-instance/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="copying-dexterity-fields-from-one-instance-to-another-instance/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-copying-dexterity-fields-from-one-instance-to-another-instance portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Sep 19, 2014</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    Copying Dexterity fields from one instance to another instance
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="copying-dexterity-fields-from-one-instance-to-another-instance/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="copying-dexterity-fields-from-one-instance-to-another-instance/image_mini.png" alt="Copying Dexterity fields from one instance to another instance" title="" height="200" width="155" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>In our current Plone project we have the usecase where we need to copy over all schema-defined values of a Dexterity-based content-type to a new "empty" instance of the same type. In Archetypes the functionality would be a three-liner however the Dexterity world with schemas, behaviors etc. is much more complicated and by a magnitude less approachable. The naive approach would be to read the values directly as attributes from the original object and assign them back to the target instance like</p>
+
+<pre>
+value = source.some_field
+target.some_field = value</pre>
+
+<p>However the Plone world is bad and evil to developers and behaviors require some special attention since because every&nbsp;behavior may implement a different storage strategy under the hood that would be bypassed by direct attribute access. Instead you need to adapt the source and target instance for each field to the specific schema adapter and read/write the values from the adapter.&nbsp;</p>
+
+<p>Here is the complete code how to copy over all schema-based values from a 'source' object to the 'target' object of the same class.</p>
+
+<p>The insanity is directly visible and it is obvious that this programming approach is hard to sell as a pro-argument to non-Plone developers.&nbsp;</p>
+
+<pre>
+def clone_plone_metadata(source, target):
+    """ Copy all metadata key-value pairs of the 'source'
+        Dexterity content-object to 'target'.
+    """
+
+    from plone.dexterity.interfaces import IDexterityFTI
+    from plone.behavior.interfaces import IBehaviorAssignable
+
+    if not isinstance(source, target.__class__):
+        raise TypeError('source and target must be the same class ({} vs {})'.format(source.__class__, target.__class__))
+
+    schema = getUtility(IDexterityFTI, name=source.portal_type).lookupSchema()
+    fields = [(schema, schema[name]) for name in schema]
+
+    assignable = IBehaviorAssignable(source)
+    for behavior in assignable.enumerateBehaviors():
+        behavior_schema = behavior.interface
+        for name in behavior_schema:
+            fields.append((behavior_schema, behavior_schema[name]))
+
+    for schema_adapter, field in fields:
+        source_adapted = schema_adapter(source)
+        target_adapted = schema_adapter(target)
+        value = getattr(source_adapted, field.getName())
+        if isinstance(value, str):
+            value = unicode(value, 'utf-8')
+        setattr(target_adapted, field.getName(), value)
+</pre>
+
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="copying-dexterity-fields-from-one-instance-to-another-instance/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="copying-dexterity-fields-from-one-instance-to-another-instance/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/copying-dexterity-fields-from-one-instance-to-another-instance by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:30 GMT -->
+</html>
+
+

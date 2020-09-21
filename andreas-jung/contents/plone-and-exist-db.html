@@ -1,0 +1,291 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/plone-and-exist-db by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:53 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> Plone and eXist-db - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="plone-and-exist-db/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="plone-and-exist-db/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-plone-and-exist-db portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Jul 02, 2014</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    Plone and eXist-db
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                <div class="documentDescription">Connecting Plone with the XML database eXist-db</div> 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="plone-and-exist-db/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="plone-and-exist-db/image_mini.png" alt="Plone and eXist-db" title="" height="58" width="200" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>Since some years we maintain the <a href="https://www.dgho-onkopedia.de/">Onkopedia</a> site, a medical portal with guidelines in the field of <span>hematology and medical oncology. </span></p>
+<p><span>The simplified workflow is like this:</span></p>
+<ul>
+<li><span>authors (doctors) write their guidelines in Word</span></li>
+<li><span>an internal editorial process brings the Word document in shape and checks the documents for consistency and for some style-guide compliance</span></li>
+<li><span>we can convert the Word documents to XHTML/CSS using OpenOffice/LibreOffice</span></li>
+<li><span>we generate PDF from XHTML/CSS based on a CSS3 Paged Media workflow and publish the PDF documents together with a HTML version on the web through Plone</span></li>
+</ul>
+<div>For a variety of reasons the complete editorial process will be switched to an XML driven workflow where Plone remains the main web CMS but with a complete new workflow under the hood.  There will be a new Word to XML conversion workflow that will produce XML documents according to some XML schemas that are currently in the making. All documents including their assets (associated images (PNG+SVG), conversion reports etc.) will be stored within the <strong>eXist-db</strong> XML database.</div>
+<div></div>
+<div>Why eXist-db?</div>
+<div>
+<ul>
+<li><span>hierarchial storage model like Plone/ZODB with collections and subcollections</span></li>
+<li><span>indexes HTML/XML out-of-the-box</span></li>
+<li><span>stores arbitrary binary data</span></li>
+<li>support for the most recent XML technologies like latest XSLT and XQuery versions</li>
+<li>various web-service APIs: WebDAV, REST, HTTP, RESTXQ...</li>
+<li>easily approachable and easy to use</li>
+<li>open-source and a smart and helpful community</li>
+<li></li>
+</ul>
+<p>For the integration of Plone with eXist-db we wrote a small Dexterity-based connector to eXist-db (package <strong>zopyx.existdb</strong>).</p>
+<p>The functionality is similar to the old Reflecto product for mounting a local filesystem into Plone.</p>
+<p>The connector provides the following functionality:</p>
+<ul class="simple">
+<li>mounts an arbitary eXist-db collection into Plone</li>
+<li>traversal support for traversing by path into subcollections</li>
+<li>indexing support (limited to one content document per Connector instance)</li>
+<li>pluggable API for custom views</li>
+<li>ACE editor integration</li>
+<li>ZIP export from eXist-db</li>
+<li>ZIP import into eXist-db</li>
+<li>preliminary API for calling arbitrary XQuery scripts from Plone<span> </span></li>
+</ul>
+<div>In our scenario we have several hundreds of individual documents stored in eXist-db in their own collection (aka folder).  Such a collection contains the XML document, the converted HTML version, the PDF version, associated images and SVG graphics, the original Word document etc. Such a collection can be "mounted" into Plone by creating an instance of the Connector associated it with the path to the subcollection. Accessing content by URL traversal is very natural:</div>
+<div>http://host:port/plone/documents/connector/@@view/path/inside/existdb/index.html - as part of the application it is possible to register dedicated views by type. In our case we have a special view that renders the main content but also some additional information, links to other resources based on the metadata stored within the XML document. </div>
+<div></div>
+<div>eXist-db is fully transactional internally - unfortunately transaction support across multiple API operations is currently not available. This is not a major problems since Plone will basically read only from eXist-db - there are only some special functions that allows us to update some metadata stored within some XML documents from the Plone side.</div>
+<div></div>
+<p>Right now we access content stored within the XML database through the WebDAV layer of eXist-db. A major relief is the Python <strong>pyfilesystem</strong> module that abstracts the filesystem layer (local, WebDAV, SFTP, HTTP, ZIP etc.) through a uniform API. You can read and write to ZIP files and WebDAV directories using the same method. This is a huge advantage because you can easily reconfigure your filesystems or underlaying storage layer easily by changing the URLs of the related systems - this real transparency .</p>
+</div>
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="plone-and-exist-db/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="plone-and-exist-db/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/plone-and-exist-db by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:57 GMT -->
+</html>
+
+

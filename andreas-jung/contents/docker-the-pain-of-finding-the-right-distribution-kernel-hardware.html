@@ -1,0 +1,351 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/docker-the-pain-of-finding-the-right-distribution-kernel-hardware by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> Docker - the pain of finding the right distribution+kernel+hardware combination - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-docker-the-pain-of-finding-the-right-distribution-kernel-hardware portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Feb 20, 2015</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    Docker - the pain of finding the right distribution+kernel+hardware combination
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/image_mini.jpg" alt="Docker - the pain of finding the right distribution+kernel+hardware combination" title="" height="156" width="200" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>Since two months I have&nbsp;been very busy with finding a working combination of Linux kernel, hardware and Linux distribution that would actually stable for running Docker in production. Only one out of eight combination worked for me.</p>
+
+<p>Feel the pain and frustration?</p>
+
+<p>All tests done with Docker 1.5.0 final without special configuration of the underlaying driver (AUFS vs. device mapper).</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width:100%">
+	<thead>
+		<tr>
+			<th scope="col" style="width:10%">Linux Distribution</th>
+			<th scope="col" style="width:10%">Kernel</th>
+			<th scope="col" style="width:10%">Hardware</th>
+			<th scope="col" style="width:10%">Hoster</th>
+			<th scope="col">Comment</th>
+			<th scope="col" style="width:10%">Status</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Ubuntu 14.04</td>
+			<td>3.13</td>
+			<td>Bare metal</td>
+			<td>Hosteurope</td>
+			<td>the only working combination (using AUFS)</td>
+			<td>WORKING</td>
+		</tr>
+		<tr>
+			<td>Ubuntu 14.04</td>
+			<td>3.13</td>
+			<td>VM</td>
+			<td>Hosteurope</td>
+			<td>hoster-patched kernel in order to fit its OpenVZ virtualization</td>
+			<td>FAIL</td>
+		</tr>
+		<tr>
+			<td>OpenSuse 13.1</td>
+			<td>2.6</td>
+			<td>Bare metal</td>
+			<td>self-hosted</td>
+			<td>kernel panics after some minutes during a Docker build&nbsp;</td>
+			<td>FAIL</td>
+		</tr>
+		<tr>
+			<td>OpenSuse 13.1</td>
+			<td>3.11</td>
+			<td>Bare metal</td>
+			<td>self-hosted</td>
+			<td>kernel panics once or twice a day during Docker builds (possibly related to BTRFS crashes)</td>
+			<td>FAIL</td>
+		</tr>
+		<tr>
+			<td>CentOS 6.6</td>
+			<td>2.6</td>
+			<td>VM</td>
+			<td>Hetzner</td>
+			<td>slow IO, long Docker builds (10 times slower than on the same VM), likely related<br />
+			to CentOS and/or the Docker device mapper (although <a href="https://docs.docker.com/installation/centos/#installing-docker---centos-6.5">supported</a> by Docker)</td>
+			<td>FAIL</td>
+		</tr>
+		<tr>
+			<td>CentOS 7.0</td>
+			<td>&gt;3.10</td>
+			<td>VM</td>
+			<td>Hetzner</td>
+			<td>slow IO, long Docker builds (10 times slower than on the same VM), likely related<br />
+			to CentOS and/or the Docker device mapper (although&nbsp;<a href="https://docs.docker.com/installation/centos/#installing-docker---centos-6.5">supported</a>&nbsp;by Docker). Also: Docker did not play well with the 'firewalld' of CentOS. Reconfiguration of the firewalld caused a network loss of all Docker containers and the docker daemon had to be restart....a major fail.</td>
+			<td>FAIL</td>
+		</tr>
+		<tr>
+			<td>Ubuntu 14.04</td>
+			<td>3.13</td>
+			<td>VM</td>
+			<td>Contabo</td>
+			<td>Docker builds much slower than directly on the same VM, not as extreme as with CentOS, Docker container execution speed OK</td>
+			<td>partly WORKING</td>
+		</tr>
+		<tr>
+			<td>CentOS 7.0</td>
+			<td>3.13</td>
+			<td>VM</td>
+			<td>Contabo</td>
+			<td>same problems as with other CentOS versions</td>
+			<td>FAIL</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Conclusions:</h3>
+
+<ul>
+	<li>CentOS is completely unusable for running Docker - at least with the default device-mapper&nbsp;</li>
+	<li>OpenSuse 13.1 problems likely related to BTRFS issues (in combination with the device-mapper)</li>
+	<li>running Docker on virtual machines in general does not seem to make much sense</li>
+	<li>Ubuntu 14.04 on real hardware seems to be the only reasonable combination right now</li>
+	<li>Docker does not perform any reasonable runtime checks for checking the sanity of the Linux host (crashes and unrelated or non-speaking error messages are the only thing you get from Docker)</li>
+	<li>The general attitude of the Docker devs: we-don't-care and works-for-us -&gt; case closed</li>
+	<li>The monolithic design of Docker is broken. Restarting Docker - for whatever reason - implies a shutdown of all containers (using --restart you can restart all containers upon restart of the Docker daemon)</li>
+	<li>The Docker documentation lies about working and supported distro and kernel support (see link above) and the Dockers obviously do not care about instead of fixing their documentation and in particular: testing Docker on different hardware and distros - apparently their testing producedures are broken from ground up.</li>
+</ul>
+
+<p>However there is hope...the upcoming CoreOS Rocket runtime engine looks very promising...however Rocket is still in early stages. At least Rocket already supports loading Docker images. On the other side: Rocket tried to place a pull request for Docker in order to achieve image compatibility between Docker and Rocket ...but typically for the ignorance and arrogance of the Docker devs: they give a shit and only care about their own thing. Unfortunately the Docker developers are corrupted by too much venture captial and became ignorant through the Docker hype.</p>
+
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="docker-the-pain-of-finding-the-right-distribution-kernel-hardware/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/docker-the-pain-of-finding-the-right-distribution-kernel-hardware by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:23 GMT -->
+</html>
+
+

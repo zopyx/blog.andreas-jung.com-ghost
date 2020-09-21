@@ -1,0 +1,264 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/writing-plone-portlets-must-be-easier by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:20:16 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> Writing Plone portlets must be easier! - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="writing-plone-portlets-must-be-easier/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="writing-plone-portlets-must-be-easier/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-writing-plone-portlets-must-be-easier portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Dec 05, 2009</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    Writing Plone portlets must be easier!
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                <div class="documentDescription">This blog entry is completely science fiction.....</div> 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <div><p>Writing Plone portlets is still pretty hard. Even as an experienced Plone programmer I usually have to check Martin Aspeli's book or check older code in order to remember how the implementation must look like. My general impression about the Plone portlets implementation: too complex, over-designed and unfriendly to average developers. So this blog entry tells you about some rough ideas about how portlet writing in Plone should look like from the prospective of a developer.</p> <h2>What are portlets?</h2> <p>Portlets are conceptually just a component providing a piece of HTML content that is rendered by some manager within some context. The concept of a (browser) view is basically pretty similar to the functionality of a portlet.</p> <h2>Usecases</h2> <h3>A simple portlet implemented with a template</h3> <p>In Plone 2 portlets were just simple page templates providing a dedicated macro "portlet". So portlet were very easy to write and configure (beside Plone 2 had no notion of portlet assigment). Within Plone I want to be able to write a small piece of template implementing the functionality and I want to be able to register it using ZCML with:</p> <pre>
+&lt;plone:portlet
+    for="my.package.interfaces.ISomething"
+    title="My cool portlet"
+    template="something_portlet.pt"
+/&gt;<br type="_moz" /></pre> <p>No Python code involved - just a template and an easy snippet of ZCML registration</p> <h3>A simple portlet with some Python code</h3> <p>A portlet implementation might need some additional logic (because we don't want complex logic within our templates. So our implementation may look like a brower view:</p> <pre>
+class SomethingPortlet(SomeMagicPortletBase):
+
+     template = ViewPageTemplateFile('something_portlet.pt')
+
+     def helperMethod1(self):
+       .....
+
+     def helperMethod2(self):
+      ...<br /></pre> <p>And the registration with Plone will look similar to a browser view:</p> <pre style="font-family: Monaco, 'Courier New', Courier, monospace; font-size: 12px; padding-top: 1em; padding-right: 1em; padding-bottom: 1em; padding-left: 1em; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: rgb(140, 172, 187); border-right-color: rgb(140, 172, 187); border-bottom-color: rgb(140, 172, 187); border-left-color: rgb(140, 172, 187); color: black; background-color: rgb(222, 231, 236); overflow-x: auto; overflow-y: auto; ">
+&lt;plone:portlet
+    for="my.package.interfaces.ISomething"
+    title="My cool portlet"
+    class="something.SomethingPortlet"
+/&gt;</pre> <h3>A portlet with configuration parameters</h3> <p>Complex portlet may need persistent parameters like #items to be displayed with the portlet. This is expressed through a schema (also similar with browser views):</p> <p>
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="writing-plone-portlets-must-be-easier/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="writing-plone-portlets-must-be-easier/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/writing-plone-portlets-must-be-easier by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:20:19 GMT -->
+</html>
+
+

@@ -1,0 +1,262 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/plone-the-broken-parts-non-pythonic-programming-model by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> Plone - the broken parts - a non-pythonic programming model - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="plone-the-broken-parts-non-pythonic-programming-model/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="plone-the-broken-parts-non-pythonic-programming-model/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-plone-the-broken-parts-non-pythonic-programming-model portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Jul 09, 2014</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    Plone - the broken parts - a non-pythonic programming model
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                <div class="documentDescription">This is a loose series of blog posts about parts of Plone that I consider as broken from the prospective of a programmer. The blog entries are based on personal experiences with Plone over the last few months collected in new Plone 4.3 projects and some legacy projects but they also reflect experienced learned from other non-core Plone developers involved in these projects (developers on the customer side).</div> 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="plone-the-broken-parts-non-pythonic-programming-model/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="plone-the-broken-parts-non-pythonic-programming-model/image_mini.png" alt="Plone - the broken parts - a non-pythonic programming model" title="" height="52" width="200" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>Archetypes served for than ten years as framework for building content-types in Plone. Dexterity had been designed as successor of Archetypes with the goal making the content-types development within Plone more easy with less boilerplate. Content-type development should become be more pythonic. Creating a new of a content-type in Plone in a "pythonic way" would look like this:</p>
+<pre>obj = plone.api.content.create(some_type)
+obj.id = 'foo'
+obj.title = u'hello world'
+obj.start_time = datetime(...)
+</pre>
+<p>This approach is in general working as long as all data are stored directly as attributes on the object itself. However there is a problem with the introduction of Dexterity behaviors. Behaviors can implement different storage strategies other than the standard attribute storage. So if a content-type is composed of several behaviors it is not legitimate to read and write object attributes directly that are introduced and managed by a behavior. With many behaviors you need to know which field comes from which behavior exactly. So your code may look like this:</p>
+<pre>obj = plone.api.content.create(some_type)<br />adapter1 = IBehavior1(obj)<br />adapter1.field1 = ...<br /><span>adapter1.field2 = ...<br />adapter2 = IBehavior2(obj)<br />adapter2.field3 = ... </span></pre>
+<p>You see the problem that this code is no longer pythonic. It exposes the Zope Component Architecture for simple object modifications to a degree that appears wild to non-core Plone developers. It is getting more scary when you need to call a content-type functionality for performing some internal processing like it is needed in plone.app.event:</p>
+<pre>from plone.app.event.dx.behaviors import data_postprocessing<br />from plone.app.event.dx.behaviors import IEventBasic<br />event = plone.api.content.create('Event')<br />adapter = IEventBasic(event)<br />adapter.start = datetime(..)<br />adapter.end = datetime(..)<br />data_postprocessing(obj, None)</pre>
+<p>This is no the point where we have a communication problem teaching Plone and Dexterity development to average developers. Such a programming model can not be taught to non-Plone people. Most people scratched their head and called what-the-fuck!?</p>
+<p>Related topic: hooks and event subscribers. Archetypes offered a bunch of hooks (good or bad) in order to provide additional functionality inside the content-types implementation without needing to hack for example the auto-generated forms for view + edit. E.g. at_post_edit_script() could be used to perform arbitrary actions after submitting the edit form. The ZCA-ish approach are event subscribers where you can register arbitrary methods and handler for various life cycle events. This concept is in general a nice solution if you want to add external behavior to existing (3rd party code) without modifying the actual implementation. But with Dexterity this is also the only solution for hooking your own additional functionality into your own content-type. </p>
+<p>Example: in zopyx.existdb we need to push some information from the Dexterity content-type after saving the data in Plone to a different system. This is a core functionality of the content-type <strong>we</strong> are implementing - it is not business logic, it is core functionality and therefore it should be able to implement this directly inside the content-type. Not possible with Dexterity right now. Instead the related code must be moved into an event subscriber outside the scope of the content-type implementation although it belongs to the core implementation. The result is scattered code that actually belongs together into one class. From the prospective of reading code and understanding the programming logic this is not desirable. So in the current programming model you end of with code that belongs to a particular content-type spread over the content-type class, event subscribers and browser views. So there is really a need for having a way to implement hooks in a reasonable way in the scope of the content-type class without explicit event subscribers.</p>
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="plone-the-broken-parts-non-pythonic-programming-model/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="plone-the-broken-parts-non-pythonic-programming-model/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/plone-the-broken-parts-non-pythonic-programming-model by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:15:49 GMT -->
+</html>
+
+

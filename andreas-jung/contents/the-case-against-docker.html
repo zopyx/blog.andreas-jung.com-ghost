@@ -1,0 +1,290 @@
+
+    <html lang="en">
+  
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/the-case-against-docker by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<base  />
+
+    <meta charset="utf-8">
+    <title> The case against Docker - Andreas Jung </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The company for Zope, Plone, Python, MongoDB and Electronic Publishing">
+    <meta name="author" content="ZOPYX, Andreas Jung, Tuebingen, Germany">
+
+    <link href="the-case-against-docker/assets/css/bootstrap.css" rel="stylesheet">
+
+    <style>
+      body {
+        padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/font-awesome.css">
+
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet/less" type="text/css" href="https://blog.zopyx.com/assets/less/bootstrap.less" />
+    <script type="text/javascript" src="https://blog.zopyx.com/assets/js/less-1.3.1.min.js"></script>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="the-case-against-docker/assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" src="https://blog.zopyx.com/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    <link rel="stylesheet" href="https://blog.zopyx.com/assets/css/base.css">
+    <link rel="stylesheet" href="https://blog.zopyx.com/bxslider/jquery.bxslider.css">
+
+
+    <!-- Plone compatibility -->
+    
+    
+  </head>
+
+  <body data-spy="scroll" data-target=".sidebar-nav" class="section-andreas-jung context-the-case-against-docker portal-type-news-item">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+            
+            <a class="brand" style="color: white" href="../contents.html">
+              <h1>Blog of Andreas Jung</h1>
+            </a>
+          
+          
+          
+          
+           <form id="global-nav-search" class="navbar-search pull-right" action="https://blog.zopyx.com/andreas-jung/search">
+            
+            <input type="text" class="search-query" placeholder="Search" name="SearchableText" />
+           </form>
+        </div>
+      </div>
+    </div>
+     <!-- /keyvisual -->
+    <article>
+      <section>
+
+        <!-- main -->
+        <div class="container container-main">
+            
+            <div class="row-fluid">
+                <div></div>
+            </div>
+            <div class="row-fluid">
+                <div class="span8">
+                    
+                    <div id="content">
+                      
+
+                        
+                            
+    <span class="label">Jan 22, 2015</span>
+
+                            
+                                
+                                
+            
+                <h1 id="parent-fieldname-title" class="documentFirstHeading">
+                    The case against Docker
+                </h1>
+            
+            
+        
+                            
+
+                            
+                                <div class="documentDescription">Trying to use Docker for production for several week finally ended in the decision to let Docker for the moment.</div> 
+                            
+
+                            <div id="content-core">
+                                
+    
+
+        
+        <div class="newsImageContainer">
+            <a href="the-case-against-docker/image/image_view_fullscreen.html" id="parent-fieldname-image">
+               <img src="the-case-against-docker/image_mini.png" alt="The case against Docker" title="" height="178" width="200" class="newsImage" />
+            </a>
+            
+        </div>
+
+        
+
+        <div id="parent-fieldname-text" class="plain">
+            <p>Over the last week I tried to use Docker in production for the following usecases:</p>
+
+<ul>
+	<li>putting eXist-db into a container for the <a href="http://www.dgho-onkopedia.de/">Onkopedia</a> relaunch in order to simply the eXist-db installation and adminstration (prod, dev, staging)</li>
+	<li>putting Plone 4.3 and eXist-db into a container for having an easy way to manage a demo instance of <a href="http://www.xml-director.info/">XML Director</a></li>
+	<li>using eXist-db and Base-X in containers in order test the XML Director backend against different XML database backends in an automatized way</li>
+</ul>
+
+<p>This blog post summerizes the former blog posts (<a href="https://www.andreas-jung.com/contents/docker-experience-with-plone">link</a>, <a href="https://www.andreas-jung.com/contents/why-docker-is-broken-at-the-moment">link</a>)&nbsp;about Docker.&nbsp;</p>
+
+<h3>Docker is not very developer friendly</h3>
+
+<p>For production we installed a decent VM running CentOS 7 with a recent kernel version (3.10) that is supported by Docker. I recreated the related Docker images on the deployment box from scratch. The bad experience discussed in my former blog posts remained. A typical build under Docker was &nbsp;5-10 times slower than executing the same scripts and code on the same machine directly under the shell. Pushing the three images - each about 1.3 GB in size - took more than two hours. I have seen that one layer of an image got pushed with a decent speed close to our bandwith limit &nbsp;while the next layer crawled over the net with 500 KB per second...completely unpredicatable push behavior. The same behavior was reproducible on a different host in a different data center. Pulling the images on a different host also showed same downstream&nbsp;issues with the Docker registry - completely useless and time consuming.</p>
+
+<p>But anyway...running the Docker images on the host caused the next surprise. Starting exist-db, executing a small Plone script for site setup and finally starting the Plone instance takes about ten minutes (under one minute without Docker). The complete virtual machine became very unresponsive during that time with a CPU load going through the roof of up to 10 with no jobs running on the VM except this Docker container. But anyway...I proceeded to the next Docker container and tried to run Base-X and eXist-db. There was a mistake in one of the Dockerfiles and I had to re-run the build for eXist-db. This build suddently failed while running apt-get inside the build....network issues. I checked the log and discovered some issues with the iptables. Not being a network guru I filed a bug report on the Docker repo @Github. It turned out that the Docker chain within iptables configuration got lost and therefore the complete network functionality of the Docker build failed. Nobody could told me where and why this happened. The only manual change done earlier was to add port 80 to the list of public ports - perhaps something was happening here. The only solution to get around the problem is to restart Docker. But restarting Docker also means that your containers go away and need to get restart - major pain in the ass factor...why is Docker so stupid and monolithic that containers can not continue to run? This is bad application design.</p>
+
+<h3>Containers are for software, not for data</h3>
+
+<p>Docker containers are consumables. Docker containers should be used to scale applications, for firing more app servers with the same setup etc. However Docker guys and fan boys want to put data into containers and speak of data containers. What the fuck? Data belongs onto the filesystem but not into a container that can neither be cloneed in an easy way nor incrementally backed up in a reasonable way. Containers are for software, not for data.</p>
+
+<h3>Docker made me inefficient, Docker blocks my daily work</h3>
+
+<p>The slowness of Docker is a big pain. Build and deployment procedures are not predictable. Even with only three or four images on the system I need with something like thirty containers and images on the system (docker ps -a, docker images). There is not even a producedure for cleaning up the mess on the system except fiddling around with something like</p>
+
+<p><span class="discreet">docker rm $(docker ps -a -q)<br />
+docker rmi $(docker images -q)</span></p>
+
+<p>Docker needed around 7-10 seconds per image/container removal..The overall cleanup operation took several minutes. Oh well, stopping the docker daemon and removing /var/lib/docker manually is much faster in reality.</p>
+
+<h3>Conclusions</h3>
+
+<p>Containers are great and provide the right abstraction layers for running applications in production.&nbsp;</p>
+
+<p>The theory and ideas behind Docker are great, its architecture and&nbsp;implementation is a mess. Docker is completely unusable in production. It is unreliable, it is unpredictable, it is flaky. The idea working with filesystem layers is great but in reality it sucks (push &amp; pull of 30-40 layers takes a lot of time - at least with the current way how it is implemented). The idea of Docker file is great but in reality it sucks (you can not re-run the build from a certain step without fiddling inside the Dockerfile). Especially with Plone buildouts it takes a long time for re-running a dockerized buildout without the chance of using buildout caches in some way).</p>
+
+<p>Other options? CoreOS came out with its Rocket approach some weeks ago...too new in order to consider it for production at this time. Rocket looks promising but well thought (compared to Docker) but far away from being ready for prime time. Vagrant is a nice way for deploying to virtual machines however this is not the level granularity we are all waiting for. NixOS with NIX package manager? The Nix package manager looks nice and powerfull and I heard only good things about Nix but I am not sure how this solves this issue with isolated environment &nbsp;and how this plays together with containers - especially NixOS is a black box right now and I need to look deeper into its functionality and features. For now: back to old-style deployments.&nbsp;</p>
+
+<p>A big sigh.....</p>
+
+<p>&nbsp;</p>
+
+        </div>
+
+
+         
+    
+
+                            </div>
+                        
+
+                      
+                    </div>
+                  
+                </div>
+                <!-- right slot -->
+                <div class="span4">
+                    <div></div>
+                    
+                        
+                    
+                    <div></div>
+                </div>
+          </div>
+        </div>
+
+        <!-- main front-page -->
+        
+      <div class="footer-push"></div>
+    
+      </section>
+    </article>
+    <!-- ----------------------------------- /Footer -->
+    
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://matomo.zopyx.com/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '8']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
+
+    <script type="text/javascript" src="the-case-against-docker/assets/js/jquery.js"></script>
+    <script type="text/javascript" src="the-case-against-docker/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/jquerytools/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/readmore/jquery.readmore.min.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/isotope/jquery.isotope.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/hyphenator/hyphenate.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/cycle/jquery.cycle.js"></script>
+    <script type="text/javascript" src="https://blog.zopyx.com/bxslider/jquery.bxslider.min.js"></script>
+
+
+    <script type="text/javascript">
+        $('.carousel').carousel({interval: 6000});
+        $('.readmore').readmore({substr_len: 250});
+        $('input[type="submit"]').addClass('btn btn-success');
+        $('input[type="reset"]').addClass('btn btn-danger');
+        if ($('body').width() > 640) {
+            $('.image-cycle').cycle({fx: 'fadeZoom', speed: 1000, timeout: 5000});
+            $('.bxslider').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider1').bxSlider({randomStart: true,speed: 1000, pause:4000, auto: true});
+            $('.bxslider-pp').bxSlider({randomStart: false, mode: 'fade', speed: 1000, pause:7000, auto: true, infiniteLoop: true, controls: false});
+        }  
+        /*
+        Hyphenator.config({
+            displaytogglebox : true,
+            minwordlength : 4,
+            defaultlanguage: 'de',
+            classname: 'content'
+        });
+        Hyphenator.run();
+        */
+
+        // Resize iframe.fluid (Slideshare, YouTube integration)
+        $(function() {
+            var $slides= $('iframe.fluid');
+            $slides.each(function() {
+                $(this)
+                    .data('aspectRatio', this.height / this.width)
+                    .removeAttr('height')
+                    .removeAttr('width');
+            });
+            // When the window is resized
+            // (You'll probably want to debounce this)
+            $(window).resize(function() {
+
+                $fluidEl = $(".media-item");
+                var newWidth = $fluidEl.width() *0.9;
+                
+                // Resize all videos according to their own aspect ratio
+                $slides.each(function() {
+
+                    var $el = $(this);
+                    $el.width(newWidth)
+                       .height(newWidth * $el.data('aspectRatio'));
+
+                });
+            // Kick off one resize to fix all videos on page load
+            }).resize();
+        });
+
+    </script>
+
+    <!-- Jira feedback collector -->
+    
+    
+
+
+  </body>
+
+<!-- Mirrored from blog.zopyx.com/andreas-jung/contents/the-case-against-docker by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 21 Sep 2020 14:14:37 GMT -->
+</html>
+
+
