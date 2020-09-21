@@ -63,6 +63,14 @@ def extract_blog(fn):
     else:
         body = None
 
+    # newsImage
+    sel = CSSSelector('.newsImage')
+    result = sel(root)
+    if result:
+        news_image = dict(result[0].attrib)
+    else:
+        news_image = None
+
     # images
     images = list()
     sel = CSSSelector('img')
@@ -80,6 +88,7 @@ def extract_blog(fn):
             body=body,
             description=desc,
             images=images,
+            news_image=news_image,
             title=title)
 
 def main():
