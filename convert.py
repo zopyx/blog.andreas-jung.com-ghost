@@ -1,3 +1,4 @@
+import json
 import os
 import lxml.html
 import pprint
@@ -42,21 +43,36 @@ def extract_blog(fn):
     result = sel(root)
     if result:
         date = result[0].text.strip()
-        date = parse(date)
+        date = parse(date).isoformat()
     else:
-        date = None
+        date = '1999-01-01'
+
+    # date
+    sel = CSSSelector('.documentDescription')
+    result = sel(root)
+    if result:
+        desc = result[0].text.strip()
+    else:
+        desc = None
 
 
     return dict(
             filename=fn,
             date=date,
+            description=desc,
             title=title)
 
 def main():
+    result = list()
     blogs = find_blogs()
     for fn in blogs:
         blog_data = extract_blog(fn)
-        pprint.pprint(blog_data)
+        result.append(blog_data)
+
+    result = sorted(result, key=lambda x: x['date'])
+
+    with open('output.json', 'w') as fp:
+        json.dump(result, fp, indent=4)
 
 if __name__ == '__main__':
     main()
