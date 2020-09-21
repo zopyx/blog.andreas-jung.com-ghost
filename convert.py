@@ -1,4 +1,4 @@
-import json
+import orjson
 import os
 import lxml.html
 import pprint
@@ -63,11 +63,23 @@ def extract_blog(fn):
     else:
         body = None
 
+    # images
+    images = list()
+    sel = CSSSelector('img')
+    images = sel(root)
+    if images:
+        images = [dict(img.attrib) for img in images]
+
+    print(images)
+
+    print(images)
+
     return dict(
             filename=fn,
             date=date,
             body=body,
             description=desc,
+            images=images,
             title=title)
 
 def main():
@@ -80,7 +92,7 @@ def main():
     result = sorted(result, key=lambda x: x['date'])
 
     with open('output.json', 'w') as fp:
-        json.dump(result, fp, indent=4)
+        fp.write(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode("utf8"))
 
 if __name__ == '__main__':
     main()
