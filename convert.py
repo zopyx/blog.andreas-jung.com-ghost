@@ -2,13 +2,19 @@ import orjson
 import os
 import lxml.html
 import pprint
+import requests
+import shutil
+import tempfile
+import urllib.parse
 from dateutil.parser import parse
 from lxml.cssselect import CSSSelector
+
+ROOT = '/Users/ajung/tmp/blog.zopyx.com/andreas-jung'
 
 def find_blogs():
 
     blogs = list()
-    for dirname, dirnames, filenames in os.walk("andreas-jung"):
+    for dirname, dirnames, filenames in os.walk(ROOT):
         for fname in filenames:
             if fname.startswith('contents'):
                 continue
@@ -21,6 +27,7 @@ def find_blogs():
                 data = fp.read()
             if '<head>' in data.decode('utf8', 'ignore'):
                 blogs.append(os.path.abspath(fname))
+
     return blogs
 
 def extract_blog(fn):
@@ -78,10 +85,6 @@ def extract_blog(fn):
     if images:
         images = [dict(img.attrib) for img in images]
 
-    print(images)
-
-    print(images)
-
     return dict(
             filename=fn,
             date=date,
@@ -90,6 +93,25 @@ def extract_blog(fn):
             images=images,
             news_image=news_image,
             title=title)
+
+def import_images(result):
+
+    for d in result:
+        images = d['images']
+        fn_base = os.path.dirname(d['filename'])
+        for image in images:
+            src = image['src']
+            if src.startswith('http'):
+                response = requests.get(src)
+                temp_fn = tempfile.mktemp()
+                with open(temp_fn, 'wb') as fp:
+                    response.raw.decode_content = True
+                    shutil.copyfileobj(response.raw, fp)    
+
+            else:
+                src = urllib.parse.unquote(src)
+                image_fn = os.path.join(fn_base, src)
+                print(image_fn, os.path.exists(image_fn))
 
 def main():
     result = list()
@@ -102,6 +124,8 @@ def main():
 
     with open('output.json', 'w') as fp:
         fp.write(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode("utf8"))
+
+    import_images(result)
 
 if __name__ == '__main__':
     main()
