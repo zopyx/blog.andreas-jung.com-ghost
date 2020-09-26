@@ -1,3 +1,4 @@
+import json
 import orjson
 import os
 import lxml.html
@@ -96,6 +97,31 @@ def extract_blog(fn):
 
 def import_images(result):
 
+    data = dict(username="info@zopyx.com", password="01$$Yetsux")
+    headers = {
+            'content-type': 'application/json',
+            'accept': 'application/json',
+            }
+
+    url = 'http://localhost:2368/ghost/api/v3/admin/session'
+    response = requests.post(url,
+            data=json.dumps(data),
+            headers=headers)
+    assert response.status_code == 201
+    cookie = response.headers["set-cookie"]
+    print(cookie)
+
+    cookie_key, cookie_value = cookie.split('=', 1)
+    cookies = {cookie_key: cookie_value}
+
+    url = 'http://localhost:2368/ghost/api/v3/admin/posts'
+    data = dict(posts=[dict(title="foo")]) 
+    response = requests.post(
+            url,
+            headers=headers,
+            cookies=cookies,
+            data=json.dumps(data))
+
     for d in result:
         images = d['images']
         fn_base = os.path.dirname(d['filename'])
@@ -107,11 +133,22 @@ def import_images(result):
                 with open(temp_fn, 'wb') as fp:
                     response.raw.decode_content = True
                     shutil.copyfileobj(response.raw, fp)    
+                image_fn = temp_fn
 
             else:
                 src = urllib.parse.unquote(src)
                 image_fn = os.path.join(fn_base, src)
                 print(image_fn, os.path.exists(image_fn))
+
+            url = 'http://localhost:2368/ghost/api/v3/admin/images/upload'
+            files = {
+                    'file': open(image_fn, 'rb')
+                    }
+
+            response = requests.post(
+                    url,
+                    cookies=cookies,
+                    files=files)
 
 def main():
     result = list()
@@ -126,6 +163,7 @@ def main():
         fp.write(orjson.dumps(result, option=orjson.OPT_INDENT_2).decode("utf8"))
 
     import_images(result)
+
 
 if __name__ == '__main__':
     main()
