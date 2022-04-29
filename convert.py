@@ -15,19 +15,14 @@ from lxml.cssselect import CSSSelector
 ROOTS = ('/Users/ajung/tmp/blog.zopyx.com/andreas-jung',
          '/home/ajung/src/blog.andreas-jung.com-ghost/andreas-jung')
 
-ROOT = None
-for root in ROOTS:
-    if os.path.exists(root):
-        ROOT = root
-        break
-
+ROOT = next((root for root in ROOTS if os.path.exists(root)), None)
 if not ROOT:
     raise IOError('No root directory found')
 
 
 def find_blogs():
 
-    blogs = list()
+    blogs = []
     for dirname, dirnames, filenames in os.walk(ROOT):
         for fname in filenames:
             if fname.startswith('contents'):
@@ -53,33 +48,21 @@ def extract_blog(fn):
     root = lxml.html.fromstring(html)
     # title=
     sel = CSSSelector('h1.documentFirstHeading')
-    result = sel(root)
-    if result:
-        title = result[0].text.strip()
-    else:
-        title = None
-
+    title = result[0].text.strip() if (result := sel(root)) else None
     # date
     sel = CSSSelector('span.label')
-    result = sel(root)
-    if result:
+    if result := sel(root):
         date = result[0].text.strip()
-        date = parse(date).isoformat() + '.000Z'
+        date = f'{parse(date).isoformat()}.000Z'
     else:
         date = '1999-01-01T00:00:00.000Z'
 
     # date
     sel = CSSSelector('.documentDescription')
-    result = sel(root)
-    if result:
-        desc = result[0].text.strip()
-    else:
-        desc = None
-
+    desc = result[0].text.strip() if (result := sel(root)) else None
     # body
     sel = CSSSelector('#content-core')
-    result = sel(root)
-    if result:
+    if result := sel(root):
         body = lxml.html.tostring(result[0], encoding=str)
     else:
         body = ''
@@ -89,14 +72,9 @@ def extract_blog(fn):
 
     # newsImage
     sel = CSSSelector('.newsImage')
-    result = sel(root)
-    if result:
-        news_image = dict(result[0].attrib)
-    else:
-        news_image = None
-
+    news_image = dict(result[0].attrib) if (result := sel(root)) else None
     # images
-    images = list()
+    images = []
     sel = CSSSelector('img')
     images = sel(root)
     if images:
@@ -179,14 +157,16 @@ def import_images(result):
     cookies = {cookie_key: cookie_value}
 
     url = 'http://localhost:2368/ghost/api/v3/admin/posts'
-    data = dict(posts=[dict(title="foo", html="<p>XXXXX</p>")]) 
-    import pdb; pdb.set_trace() 
+    data = dict(posts=[dict(title="foo", html="<p>XXXXX</p>")])
+    import pdb
+    pdb.set_trace()
     response = requests.post(
             url,
             headers=headers,
             cookies=cookies,
             data=json.dumps(data))
 
+    url = 'http://localhost:2368/ghost/api/v3/admin/images/upload'
     for d in result:
         images = d['images']
         fn_base = os.path.dirname(d['filename'])
@@ -205,7 +185,6 @@ def import_images(result):
                 image_fn = os.path.join(fn_base, src)
                 print(image_fn, os.path.exists(image_fn))
 
-            url = 'http://localhost:2368/ghost/api/v3/admin/images/upload'
             files = {
                     'file': open(image_fn, 'rb')
                     }
@@ -216,7 +195,7 @@ def import_images(result):
                     files=files)
 
 def main():
-    result = list()
+    result = []
     blogs = find_blogs()
     for fn in blogs:
         blog_data = extract_blog(fn)
